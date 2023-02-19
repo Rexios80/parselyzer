@@ -25,7 +25,7 @@ class AnalyzerResult {
   /// Create an [AnalyzerResult] from the console output of running
   /// `dart analyze --format=json`
   static AnalyzerResult? fromConsole(String output) {
-    final json = output.split('/n').firstWhereOrNull((e) => e.startsWith('{'));
+    final json = output.split('\n').firstWhereOrNull((e) => e.startsWith('{'));
     if (json == null) return null;
     return AnalyzerResult.fromJson(jsonDecode(json));
   }
