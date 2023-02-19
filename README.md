@@ -1,4 +1,4 @@
-Parse `dart analyze --format json` output into Dart objects.
+Parse `dart analyze --format=json` output into Dart objects.
 
 ## Features
 

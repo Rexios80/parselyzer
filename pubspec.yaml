@@ -1,5 +1,5 @@
 name: parselyzer
-description: Parse `dart analyze --format json` output into Dart objects.
+description: Parse `dart analyze --format=json` output into Dart objects.
 homepage: https://github.com/Rexios80/parselyzer
 version: 0.1.0
 
