@@ -1,3 +1,5 @@
+// Convert file extension to `.dart` before running tests
+
 final String test = 1234;
 
 void main() {
