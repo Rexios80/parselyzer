@@ -1,7 +1,9 @@
 import 'package:analyzer/error/error.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+/// Convert between [ErrorSeverity] and [String]
 class ErrorSeverityConverter extends JsonConverter<ErrorSeverity, String> {
+  /// Constructor
   const ErrorSeverityConverter();
 
   @override
@@ -14,7 +16,9 @@ class ErrorSeverityConverter extends JsonConverter<ErrorSeverity, String> {
   String toJson(ErrorSeverity object) => object.name;
 }
 
+/// Convert between [ErrorType] and [String]
 class ErrorTypeConverter extends JsonConverter<ErrorType, String> {
+  /// Constructor
   const ErrorTypeConverter();
 
   @override
