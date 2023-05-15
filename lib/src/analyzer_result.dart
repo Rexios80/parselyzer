@@ -45,7 +45,7 @@ class AnalyzerDiagnostic {
   final String code;
 
   /// Diagnostic documentation
-  final String documentation;
+  final String? documentation;
 
   /// Diagnostic location
   final DiagnosticLocation location;

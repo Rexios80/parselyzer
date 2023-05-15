@@ -25,7 +25,7 @@ Map<String, dynamic> _$AnalyzerResultToJson(AnalyzerResult instance) =>
 AnalyzerDiagnostic _$AnalyzerDiagnosticFromJson(Map<String, dynamic> json) =>
     AnalyzerDiagnostic(
       code: json['code'] as String,
-      documentation: json['documentation'] as String,
+      documentation: json['documentation'] as String?,
       location:
           DiagnosticLocation.fromJson(json['location'] as Map<String, dynamic>),
       problemMessage: json['problemMessage'] as String,
