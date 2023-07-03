@@ -1,3 +1,6 @@
+## 0.1.2
+- Upgrades analyzer to `6.0.0`
+
 ## 0.1.1
 - Makes `documentation` field nullable
 
