@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: require_trailing_commas
+// ignore_for_file: require_trailing_commas, document_ignores
 
 part of 'analyzer_result.dart';
 
@@ -10,7 +10,7 @@ part of 'analyzer_result.dart';
 
 AnalyzerResult _$AnalyzerResultFromJson(Map<String, dynamic> json) =>
     AnalyzerResult(
-      version: json['version'] as int,
+      version: (json['version'] as num).toInt(),
       diagnostics: (json['diagnostics'] as List<dynamic>)
           .map((e) => AnalyzerDiagnostic.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -76,9 +76,9 @@ Map<String, dynamic> _$DiagnosticLocationRangeToJson(
 DiagnosticLocationRangePoint _$DiagnosticLocationRangePointFromJson(
         Map<String, dynamic> json) =>
     DiagnosticLocationRangePoint(
-      column: json['column'] as int,
-      line: json['line'] as int,
-      offset: json['offset'] as int,
+      column: (json['column'] as num).toInt(),
+      line: (json['line'] as num).toInt(),
+      offset: (json['offset'] as num).toInt(),
     );
 
 Map<String, dynamic> _$DiagnosticLocationRangePointToJson(
