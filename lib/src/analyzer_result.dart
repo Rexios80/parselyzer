@@ -55,11 +55,11 @@ class AnalyzerDiagnostic {
 
   /// Diagnostic severity
   @ErrorSeverityConverter()
-  final ErrorSeverity severity;
+  final DiagnosticSeverity severity;
 
   /// Diagnostic type
   @ErrorTypeConverter()
-  final ErrorType type;
+  final DiagnosticType type;
 
   /// Constructor
   AnalyzerDiagnostic({

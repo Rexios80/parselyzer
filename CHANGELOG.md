@@ -1,3 +1,7 @@
+## 0.1.4
+
+- Supports analyzer 8
+
 ## 0.1.3
 
 - Supports analyzer 7
