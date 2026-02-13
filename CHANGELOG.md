@@ -1,3 +1,7 @@
+## 0.1.6
+
+- Supports analyzer 10
+
 ## 0.1.5
 
 - Supports analyzer 9
