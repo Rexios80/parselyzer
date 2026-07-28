@@ -2,13 +2,10 @@ import 'dart:convert';
 
 import 'package:analyzer/error/error.dart';
 import 'package:collection/collection.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:parselyzer/src/convert.dart';
-
-part 'analyzer_result.g.dart';
+import 'package:meta/meta.dart';
 
 /// Parsed analysis result
-@JsonSerializable()
+@immutable
 class AnalyzerResult {
   /// Analysis version
   final int version;
@@ -17,10 +14,7 @@ class AnalyzerResult {
   final List<AnalyzerDiagnostic> diagnostics;
 
   /// Constructor
-  AnalyzerResult({
-    required this.version,
-    required this.diagnostics,
-  });
+  const AnalyzerResult({required this.version, required this.diagnostics});
 
   /// Create an [AnalyzerResult] from the console output of running
   /// `dart analyze --format=json`
@@ -31,15 +25,22 @@ class AnalyzerResult {
   }
 
   /// From json
-  factory AnalyzerResult.fromJson(Map<String, dynamic> json) =>
-      _$AnalyzerResultFromJson(json);
+  factory AnalyzerResult.fromJson(Map<String, dynamic> json) => AnalyzerResult(
+    version: (json['version'] as num).toInt(),
+    diagnostics: (json['diagnostics'] as List<dynamic>)
+        .map((e) => AnalyzerDiagnostic.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
 
   /// To json
-  Map<String, dynamic> toJson() => _$AnalyzerResultToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'version': version,
+    'diagnostics': diagnostics,
+  };
 }
 
 /// Analysis disgnostic
-@JsonSerializable()
+@immutable
 class AnalyzerDiagnostic {
   /// Diagnostic code
   final String code;
@@ -54,15 +55,13 @@ class AnalyzerDiagnostic {
   final String problemMessage;
 
   /// Diagnostic severity
-  @ErrorSeverityConverter()
   final DiagnosticSeverity severity;
 
   /// Diagnostic type
-  @ErrorTypeConverter()
   final DiagnosticType type;
 
   /// Constructor
-  AnalyzerDiagnostic({
+  const AnalyzerDiagnostic({
     required this.code,
     required this.documentation,
     required this.location,
@@ -73,14 +72,39 @@ class AnalyzerDiagnostic {
 
   /// From json
   factory AnalyzerDiagnostic.fromJson(Map<String, dynamic> json) =>
-      _$AnalyzerDiagnosticFromJson(json);
+      AnalyzerDiagnostic(
+        code: json['code'] as String,
+        documentation: json['documentation'] as String?,
+        location: DiagnosticLocation.fromJson(
+          json['location'] as Map<String, dynamic>,
+        ),
+        problemMessage: json['problemMessage'] as String,
+        severity: DiagnosticSeverity.values.firstWhere(
+          (e) => e.name == json['severity'],
+          orElse: () => throw Exception(
+            'Unknown DiagnosticSeverity: ${json['severity']}',
+          ),
+        ),
+        type: DiagnosticType.values.firstWhere(
+          (e) => e.name == json['type'],
+          orElse: () =>
+              throw Exception('Unknown DiagnosticType: ${json['type']}'),
+        ),
+      );
 
   /// To json
-  Map<String, dynamic> toJson() => _$AnalyzerDiagnosticToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'code': code,
+    'documentation': documentation,
+    'location': location,
+    'problemMessage': problemMessage,
+    'severity': severity.name,
+    'type': type.name,
+  };
 }
 
 /// The location of a diagnostic
-@JsonSerializable()
+@immutable
 class DiagnosticLocation {
   /// File path
   final String file;
@@ -89,21 +113,26 @@ class DiagnosticLocation {
   final DiagnosticLocationRange range;
 
   /// Constructor
-  DiagnosticLocation({
-    required this.file,
-    required this.range,
-  });
+  const DiagnosticLocation({required this.file, required this.range});
 
   /// From json
   factory DiagnosticLocation.fromJson(Map<String, dynamic> json) =>
-      _$DiagnosticLocationFromJson(json);
+      DiagnosticLocation(
+        file: json['file'] as String,
+        range: DiagnosticLocationRange.fromJson(
+          json['range'] as Map<String, dynamic>,
+        ),
+      );
 
   /// To json
-  Map<String, dynamic> toJson() => _$DiagnosticLocationToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'file': file,
+    'range': range,
+  };
 }
 
 /// The range of the diagnostic location
-@JsonSerializable()
+@immutable
 class DiagnosticLocationRange {
   /// Start point
   final DiagnosticLocationRangePoint start;
@@ -112,21 +141,28 @@ class DiagnosticLocationRange {
   final DiagnosticLocationRangePoint end;
 
   /// Constructor
-  DiagnosticLocationRange({
-    required this.start,
-    required this.end,
-  });
+  const DiagnosticLocationRange({required this.start, required this.end});
 
   /// From json
   factory DiagnosticLocationRange.fromJson(Map<String, dynamic> json) =>
-      _$DiagnosticLocationRangeFromJson(json);
+      DiagnosticLocationRange(
+        start: DiagnosticLocationRangePoint.fromJson(
+          json['start'] as Map<String, dynamic>,
+        ),
+        end: DiagnosticLocationRangePoint.fromJson(
+          json['end'] as Map<String, dynamic>,
+        ),
+      );
 
   /// To json
-  Map<String, dynamic> toJson() => _$DiagnosticLocationRangeToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'start': start,
+    'end': end,
+  };
 }
 
 /// The point of the diagnostic location range
-@JsonSerializable()
+@immutable
 class DiagnosticLocationRangePoint {
   /// Column
   final int column;
@@ -138,7 +174,7 @@ class DiagnosticLocationRangePoint {
   final int offset;
 
   /// Constructor
-  DiagnosticLocationRangePoint({
+  const DiagnosticLocationRangePoint({
     required this.column,
     required this.line,
     required this.offset,
@@ -146,8 +182,16 @@ class DiagnosticLocationRangePoint {
 
   /// From json
   factory DiagnosticLocationRangePoint.fromJson(Map<String, dynamic> json) =>
-      _$DiagnosticLocationRangePointFromJson(json);
+      DiagnosticLocationRangePoint(
+        column: (json['column'] as num).toInt(),
+        line: (json['line'] as num).toInt(),
+        offset: (json['offset'] as num).toInt(),
+      );
 
   /// To json
-  Map<String, dynamic> toJson() => _$DiagnosticLocationRangePointToJson(this);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'column': column,
+    'line': line,
+    'offset': offset,
+  };
 }
