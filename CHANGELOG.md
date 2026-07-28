@@ -1,3 +1,8 @@
+## 0.1.8
+
+- Supports analyzer 14
+- Removes `json_serializable` / `json_annotation` in favor of hand-written JSON methods
+
 ## 0.1.7
 
 - Supports analyzer 12
