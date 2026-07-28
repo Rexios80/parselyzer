@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:analyzer/error/error.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:parselyzer/src/convert.dart';
 
 /// Parsed analysis result
 @immutable
@@ -36,7 +35,7 @@ class AnalyzerResult {
   /// To json
   Map<String, dynamic> toJson() => <String, dynamic>{
     'version': version,
-    'diagnostics': diagnostics.map((e) => e.toJson()).toList(),
+    'diagnostics': diagnostics,
   };
 }
 
@@ -80,20 +79,27 @@ class AnalyzerDiagnostic {
           json['location'] as Map<String, dynamic>,
         ),
         problemMessage: json['problemMessage'] as String,
-        severity: const ErrorSeverityConverter().fromJson(
-          json['severity'] as String,
+        severity: DiagnosticSeverity.values.firstWhere(
+          (e) => e.name == json['severity'],
+          orElse: () => throw Exception(
+            'Unknown DiagnosticSeverity: ${json['severity']}',
+          ),
         ),
-        type: const ErrorTypeConverter().fromJson(json['type'] as String),
+        type: DiagnosticType.values.firstWhere(
+          (e) => e.name == json['type'],
+          orElse: () =>
+              throw Exception('Unknown DiagnosticType: ${json['type']}'),
+        ),
       );
 
   /// To json
   Map<String, dynamic> toJson() => <String, dynamic>{
     'code': code,
     'documentation': documentation,
-    'location': location.toJson(),
+    'location': location,
     'problemMessage': problemMessage,
-    'severity': const ErrorSeverityConverter().toJson(severity),
-    'type': const ErrorTypeConverter().toJson(type),
+    'severity': severity.name,
+    'type': type.name,
   };
 }
 
@@ -121,7 +127,7 @@ class DiagnosticLocation {
   /// To json
   Map<String, dynamic> toJson() => <String, dynamic>{
     'file': file,
-    'range': range.toJson(),
+    'range': range,
   };
 }
 
@@ -150,8 +156,8 @@ class DiagnosticLocationRange {
 
   /// To json
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'start': start.toJson(),
-    'end': end.toJson(),
+    'start': start,
+    'end': end,
   };
 }
 
